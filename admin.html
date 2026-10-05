@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="H.alathm">
+<meta name="referrer" content="no-referrer">
+<title>Admin Dashboard — H.alathm</title>
+<style>
+:root{
+  --BG:#F4F6F9;--CARD:#FFFFFF;--TEXT:#1F2937;--MUTED:#64748B;
+  --BORDER:#E2E8F0;--BORDER2:#CBD5E1;--PRIMARY:#0F4C81;
+  --RED:#DC2626;--GREEN:#047857;--HEADER_BG:#EEF3F9;
+  --BLUE:#2563EB;--AMBER:#D97706;--AMBER_BG:#FEF3C7;
+}
+*{box-sizing:border-box;font-family:"Segoe UI","Inter",Tahoma,Arial,sans-serif;}
+body{margin:0 auto;padding:14px;max-width:2100px;background:var(--BG);color:var(--TEXT);
+  min-height:100vh;font-size:13px;line-height:1.4;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:#F1F5F9;}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:6px;}
+.card{background:var(--CARD);border:1px solid var(--BORDER);border-radius:10px;
+  padding:12px;margin-bottom:10px;box-shadow:0 1px 2px rgba(16,24,40,.05);}
+
+/* ===== Admin Header ===== */
+.app-header{background:linear-gradient(135deg,#0F4C81,#0B3A63);
+  border:1px solid var(--PRIMARY);border-radius:10px;
+  padding:16px 22px;margin-bottom:10px;color:#fff;
+  box-shadow:0 4px 14px rgba(15,76,129,.18);}
+.header-top{display:flex;gap:14px;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.18);margin-bottom:14px;}
+.admin-badge{display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+  padding:8px 16px;border-radius:8px;}
+.admin-badge .av{width:38px;height:38px;border-radius:50%;background:#fff;
+  color:#0F4C81;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:16px;}
+.admin-badge .meta{display:flex;flex-direction:column;line-height:1.3;}
+.admin-badge .meta .n{font-size:13px;font-weight:800;letter-spacing:.5px;}
+.admin-badge .meta .e{font-size:10.5px;color:#BFD6EC;font-weight:500;}
+
+.header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.hbtn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);
+  color:#fff;padding:8px 14px;font-size:12px;font-weight:700;border-radius:8px;
+  cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:.15s;}
+.hbtn:hover{background:rgba(255,255,255,.25);}
+.hbtn.primary{background:#fff;color:var(--PRIMARY);border-color:#fff;}
+.hbtn.primary:hover{background:#E8F1F9;}
+.hbtn.danger{background:rgba(220,38,38,.85);border-color:rgba(220,38,38,.9);}
+.hbtn.danger:hover{background:#B91C1C;}
+
+.main-title{color:#fff;font-size:22px;font-weight:800;letter-spacing:4px;
+  text-align:center;margin:6px 0 4px;text-transform:uppercase;}
+.main-subtitle{color:#9BB8D6;font-size:10.5px;font-weight:600;letter-spacing:2px;
+  text-align:center;margin:0 0 16px;text-transform:uppercase;}
+
+/* ===== Cloud section ===== */
+.cloud-section{
+  background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;padding:12px 14px;margin-bottom:4px;
+  display:grid;grid-template-columns:1.6fr 1.4fr auto;
+  gap:10px;align-items:end;}
+@media(max-width:900px){.cloud-section{grid-template-columns:1fr 1fr;}}
+.cloud-section .cf{display:flex;flex-direction:column;gap:4px;}
+.cloud-section .cf label{color:#BFD6EC;font-size:9.5px;font-weight:700;
+  letter-spacing:.7px;text-transform:uppercase;}
+.cloud-section .cf input{
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.28);
+  color:#fff;border-radius:6px;padding:8px 10px;font-size:12px;
+  outline:none;font-family:inherit;}
+.cloud-section .cf input::placeholder{color:#9BB8D6;}
+.cloud-section .cf input:focus{border-color:#fff;background:rgba(255,255,255,.16);}
+.cloud-btn{
+  background:#fff;color:var(--PRIMARY);border:none;border-radius:6px;
+  padding:9px 22px;font-size:12px;font-weight:800;cursor:pointer;
+  letter-spacing:.5px;white-space:nowrap;font-family:inherit;}
+.cloud-btn:hover{background:#E8F1F9;}
+.cloud-btn.connected{background:#047857;color:#fff;}
+.cloud-btn.connected:hover{background:#065F46;}
+
+/* ===== Stats ===== */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:12px;margin-bottom:12px;}
+.stat{background:#fff;border-radius:10px;padding:16px;
+  border:1px solid var(--BORDER);}
+.stat .l{color:var(--MUTED);font-size:10.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.stat .v{color:var(--PRIMARY);font-size:26px;font-weight:800;}
+.stat .v.alert{color:var(--RED);}
+
+/* ===== Toolbar ===== */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  padding:12px;background:#fff;border:1px solid var(--BORDER);
+  border-radius:10px;margin-bottom:10px;font-size:12px;}
+.toolbar button{padding:8px 14px;border-radius:6px;border:none;
+  font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;}
+.btn-green{background:#047857;color:#fff;}
+.btn-green:hover{background:#065F46;}
+.btn-red{background:var(--RED);color:#fff;}
+.btn-red:hover{background:#B91C1C;}
+.btn-orange{background:var(--AMBER);color:#fff;}
+.btn-orange:hover{background:#B45309;}
+.btn-primary{background:var(--PRIMARY);color:#fff;}
+.btn-primary:hover{background:#0B3A63;}
+.btn-gray{background:#64748B;color:#fff;}
+.btn-gray:hover{background:#475569;}
+.toolbar input,.toolbar select{padding:8px 10px;
+  border:1px solid var(--BORDER2);border-radius:6px;font-size:12.5px;
+  outline:none;font-family:inherit;background:#fff;}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--PRIMARY);
+  box-shadow:0 0 0 3px rgba(15,76,129,.12);}
+.toolbar .hint{color:var(--MUTED);font-size:11.5px;margin-left:auto;
+  font-style:italic;}
+.toolbar .hint strong{color:var(--PRIMARY);font-style:normal;}
+
+/* ===== Table ===== */
+.table-wrap{overflow:auto;max-height:65vh;border:1px solid var(--BORDER);
+  border-radius:10px;background:#fff;}
+table.data{width:100%;border-collapse:collapse;font-size:11.5px;}
+table.data th{position:sticky;top:0;z-index:2;background:var(--HEADER_BG);
+  color:var(--PRIMARY);padding:9px 6px;font-size:10px;font-weight:700;
+  text-transform:uppercase;border-bottom:2px solid #D6DEE8;
+  border-right:1px solid #E2E8F0;text-align:center;letter-spacing:.3px;}
+table.data th:last-child{border-right:none;}
+table.data td{padding:6px;text-align:center;border-bottom:1px solid #EEF2F7;
+  border-right:1px solid #EEF2F7;color:var(--TEXT);}
+table.data td:last-child{border-right:none;}
+table.data tr:hover td{background:#F8FAFC;}
+table.data td.neg{color:var(--RED);font-weight:700;}
+table.data td.pos{color:var(--GREEN);font-weight:700;}
+table.data td.red{background:var(--RED);color:#fff;font-weight:800;}
+table.data td.station{background:#FAFCFE;font-weight:700;color:var(--PRIMARY);
+  text-align:left;padding-left:12px;}
+
+/* ===== Modal ===== */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.62);
+  display:none;justify-content:center;align-items:center;z-index:1600;
+  padding:20px;backdrop-filter:blur(2px);}
+.modal.show{display:flex;}
+.mbox{background:#fff;border-radius:14px;padding:26px 28px;
+  max-width:600px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(15,23,42,.3);}
+.mbox h2{color:var(--PRIMARY);margin:0 0 6px;font-size:18px;
+  letter-spacing:.5px;}
+.mbox p{color:var(--MUTED);font-size:12.5px;line-height:1.6;margin:0 0 16px;}
+.mbox .hintbar{background:#F1F5F9;color:#334155;padding:10px 14px;
+  border-radius:8px;font-size:11.5px;line-height:1.6;margin-bottom:16px;
+  border-left:3px solid var(--PRIMARY);}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+.mact button{padding:10px 22px;border-radius:8px;border:none;font-weight:700;
+  cursor:pointer;font-size:12.5px;font-family:inherit;}
+.mact button.btn-primary{background:var(--PRIMARY);color:#fff;}
+.mact button.btn-primary:hover{background:#0B3A63;}
+.mact button.btn-cancel{background:#E2E8F0;color:#334155;}
+.mact button.btn-cancel:hover{background:#CBD5E1;}
+
+.password-list{background:#F8FAFC;border:1px solid var(--BORDER);
+  border-radius:8px;padding:14px;margin:12px 0;max-height:320px;overflow-y:auto;}
+.password-list .item{display:flex;gap:10px;align-items:center;
+  padding:8px 4px;border-bottom:1px solid #EEF2F7;}
+.password-list .item:last-child{border-bottom:none;}
+.password-list .stn{font-weight:800;color:var(--PRIMARY);min-width:100px;
+  font-family:Consolas,monospace;font-size:13px;letter-spacing:1px;}
+.password-list input{flex:1;padding:8px 10px;font-size:12.5px;
+  border:1px solid var(--BORDER2);border-radius:6px;font-family:inherit;outline:none;}
+.password-list input:focus{border-color:var(--PRIMARY);
+  box-shadow:0 0 0 3px rgba(15,76,129,.12);}
+.password-list .count{font-size:10.5px;color:var(--MUTED);margin-left:4px;
+  font-weight:600;}
+
+/* ===== Toast ===== */
+.toast{position:fixed;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(10px);
+  background:var(--PRIMARY);color:#fff;padding:11px 24px;
+  border-radius:8px;font-weight:600;font-size:12.5px;opacity:0;
+  transition:.25s;z-index:2000;pointer-events:none;
+  box-shadow:0 8px 24px rgba(15,23,42,.25);max-width:85vw;text-align:center;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--RED);}
+.toast.success{background:var(--GREEN);}
+.toast.warn{background:var(--AMBER);}
+
+/* ===== Loading ===== */
+.loading{position:fixed;inset:0;background:rgba(15,23,42,.62);
+  display:none;justify-content:center;align-items:center;z-index:1500;
+  backdrop-filter:blur(2px);}
+.loading.show{display:flex;}
+.loading .box{background:#fff;border-radius:14px;padding:30px 40px;
+  text-align:center;min-width:260px;
+  box-shadow:0 20px 60px rgba(15,23,42,.3);}
+.loading .sp{width:40px;height:40px;border:3px solid #E2E8F0;
+  border-top-color:var(--PRIMARY);border-radius:50%;margin:0 auto 14px;
+  animation:s 1s linear infinite;}
+@keyframes s{to{transform:rotate(360deg);}}
+.loading p{color:var(--PRIMARY);font-size:13px;font-weight:600;margin:0;}
+
+/* ===== Empty state ===== */
+.empty-state{padding:60px 20px;text-align:center;background:#fff;
+  border:1px solid var(--BORDER);border-radius:10px;}
+.empty-state .icon{font-size:52px;margin-bottom:14px;}
+.empty-state h3{color:var(--PRIMARY);font-size:16px;margin:0 0 8px;font-weight:700;}
+.empty-state p{color:var(--MUTED);font-size:12.5px;margin:0;line-height:1.7;}
+
+.footer-signature{text-align:center;padding:16px 20px;margin-top:12px;
+  color:var(--MUTED);font-size:11px;letter-spacing:1.5px;font-weight:600;}
+.footer-signature .sig{color:var(--PRIMARY);font-weight:800;letter-spacing:2px;
+  font-family:Consolas,monospace;font-size:13px;}
+.footer-signature .sep{margin:0 10px;color:var(--BORDER2);}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<div class="app-header">
+  <div class="header-top">
+    <div class="admin-badge">
+      <div class="av" id="adminAvatar">A</div>
+      <div class="meta">
+        <div class="n" id="adminName">Admin</div>
+        <div class="e" id="adminEmail">Not connected</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="hbtn" id="refreshBtn" type="button">🔄 Refresh All</button>
+      <button class="hbtn" id="setPasswordsBtn" type="button">🔐 Set Passwords</button>
+      <button class="hbtn primary" id="exportExcelBtn" type="button">📊 Export Excel</button>
+      <button class="hbtn primary" id="exportPdfBtn" type="button">📄 Export PDF</button>
+      <button class="hbtn danger" id="clearBtn" type="button">🗑️ Clear All</button>
+    </div>
+  </div>
+
+  <div class="cloud-section">
+    <div class="cf">
+      <label>GitHub Token (read-only recommended)</label>
+      <input id="ghToken" type="password" placeholder="ghp_..." autocomplete="off">
+    </div>
+    <div class="cf">
+      <label>Repo (owner/name)</label>
+      <input id="ghRepo" type="text" placeholder="user/manual-dipping-data" autocomplete="off">
+    </div>
+    <button id="ghConnectBtn" class="cloud-btn" type="button">🔗 Connect</button>
+  </div>
+
+  <h1 class="main-title">👑 Admin Dashboard</h1>
+  <p class="main-subtitle">All Stations · Read-Only · Encrypted</p>
+</div>
+
+<!-- ============ STATS ============ -->
+<div class="stats">
+  <div class="stat"><div class="l">Stations</div><div class="v" id="sStations">0</div></div>
+  <div class="stat"><div class="l">Reports</div><div class="v" id="sReports">0</div></div>
+  <div class="stat"><div class="l">Tank Records</div><div class="v" id="sTanks">0</div></div>
+  <div class="stat"><div class="l">Alerts (≤ -10)</div><div class="v alert" id="sAlerts">0</div></div>
+  <div class="stat"><div class="l">Last Sync</div><div class="v" id="sLastSync" style="font-size:14px;">—</div></div>
+</div>
+
+<!-- ============ TOOLBAR ============ -->
+<div class="toolbar">
+  <input id="fStation" type="text" placeholder="🔍 Filter by station..." style="min-width:200px;">
+  <input id="fFrom" type="date" title="From date">
+  <input id="fTo" type="date" title="To date">
+  <select id="fDiff">
+    <option value="">All Differences</option>
+    <option value="alert">≤ -10 (Alerts only)</option>
+    <option value="neg">Negative</option>
+    <option value="pos">Positive</option>
+  </select>
+  <button class="btn-primary" id="applyFiltersBtn" type="button">🔍 Apply</button>
+  <button class="btn-gray" id="resetFiltersBtn" type="button">↺ Reset</button>
+  <span class="hint" id="filterHint"></span>
+</div>
+
+<!-- ============ TABLE ============ -->
+<div class="table-wrap" id="tableWrap" style="display:none;">
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Station</th><th>Date</th><th>Tank</th><th>Product</th>
+        <th>TLS MM</th><th>TLS L</th><th>Chart L</th><th>Diff TLS-Chart</th>
+        <th>Manual MM</th><th>Diff MM</th><th>Manual Chart L</th><th>Diff Ltrs</th>
+        <th>Corr MM</th><th>Corr L</th><th>Corr %</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div id="emptyState" class="empty-state">
+  <div class="icon">👑</div>
+  <h3>Admin Dashboard</h3>
+  <p>
+    Paste your <b>GitHub Token</b> and the <b>Repo</b> above, then click <b>🔗 Connect</b>.<br>
+    After connecting, click <b>🔐 Set Passwords</b> and enter each station's password to decrypt reports.
+  </p>
+</div>
+
+<div class="footer-signature">
+  <span>© 2026</span>
+  <span class="sep">|</span>
+  <span>Admin Dashboard</span>
+  <span class="sep">|</span>
+  <span class="sig">H.alathm</span>
+</div>
+
+<!-- ============ PASSWORDS MODAL ============ -->
+<div class="modal" id="passModal">
+  <div class="mbox">
+    <h2>🔐 Enter Encryption Passwords</h2>
+    <p>Enter the encryption password for each station. Passwords stay only in this tab's memory until you refresh or click Clear.</p>
+    <div class="hintbar">
+      💡 Admin needs each station's password to decrypt their reports.
+      Passwords are used to derive keys in the browser — they never leave your device.
+    </div>
+    <div class="password-list" id="passwordList"></div>
+    <div class="mact">
+      <button class="btn-cancel" id="passCancel" type="button">Cancel</button>
+      <button class="btn-primary" id="passSave" type="button">Decrypt & Load</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="loading" id="loadingOverlay">
+  <div class="box">
+    <div class="sp"></div>
+    <p id="loadTxt">Loading...</p>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   Admin Dashboard — Author: H.alathm
+   Read-only access to encrypted reports across all stations
+   ========================================================= */
+"use strict";
+
+/* =========================================================
+   CONSTANTS
+   ========================================================= */
+const AUTHOR = "H.alathm";
+const RED_THRESHOLD = -10;
+const DECIMALS = 3;
+const CLOUD_CHARTS_DIR = "charts";
+const CLOUD_REPORTS_DIR = "reports";
+
+/* Crypto */
+const PBKDF2_ITER = 200000;
+const IV_LEN = 12;
+const SALT_LEN = 16;
+const ENC_VERSION = 2;
+
+/* Storage keys */
+const LS_CLOUD_KEY = "manual_dipping_admin_cloud_v1";
+const SS_PASSWORDS_KEY = "manual_dipping_admin_passes_v1";
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let cloud = {
+  token: "",
+  repo: "",
+  branch: "main",
+  connected: false,
+  user: ""
+};
+
+let allData = [];          // decrypted records
+let rawData = [];          // encrypted report file objects
+let stationList = [];      // list of detected stations
+let masterKeys = {};       // station -> CryptoKey (in memory only)
+let filteredData = [];     // after filters
+let filters = { station:"", from:"", to:"", diff:"" };
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function setText(el, txt){ if(el) el.textContent = String(txt == null ? "" : txt); }
+function escapeHtml(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function fmtNum(n){
+  if(typeof n !== "number" || !isFinite(n)) return "0." + "0".repeat(DECIMALS);
+  return n.toFixed(DECIMALS);
+}
+
+let _toastTm = null;
+function showToast(msg, type){
+  const t = document.getElementById("toast");
+  setText(t, msg);
+  t.className = "toast show" + (type === "error" ? " error" : (type === "success" ? " success" : (type === "warn" ? " warn" : "")));
+  clearTimeout(_toastTm);
+  _toastTm = setTimeout(()=>{ t.className = "toast"; }, 3000);
+}
+function showLoading(text){
+  setText(document.getElementById("loadTxt"), text || "Loading...");
+  document.getElementById("loadingOverlay").classList.add("show");
+}
+function hideLoading(){
+  document.getElementById("loadingOverlay").classList.remove("show");
+}
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+const _memStore = {};
+function _storageGet(k){ try{return localStorage.getItem(k);}catch(e){return _memStore[k]!==undefined?_memStore[k]:null;} }
+function _storageSet(k,v){ try{localStorage.setItem(k,v);}catch(e){} _memStore[k]=v; }
+function _storageRemove(k){ try{localStorage.removeItem(k);}catch(e){} delete _memStore[k]; }
+
+/* =========================================================
+   ENCRYPTION (matches index.html)
+   ========================================================= */
+function _bufToB64(buf){
+  const b = new Uint8Array(buf);
+  let s = "";
+  for (let i = 0; i < b.byteLength; i++) s += String.fromCharCode(b[i]);
+  return btoa(s);
+}
+function _b64ToBuf(b64){
+  const s = atob(b64);
+  const b = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+  return b.buffer;
+}
+function _strToBuf(s){ return new TextEncoder().encode(s); }
+function _bufToStr(b){ return new TextDecoder().decode(b); }
+function _utf8ToB64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function _b64ToUtf8(b64){
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+async function deriveMasterKey(password, stationId){
+  const km = await crypto.subtle.importKey(
+    "raw", _strToBuf(password), "PBKDF2", false, ["deriveKey"]);
+  return await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: _strToBuf("MDSTATION_v35_" + stationId),
+      iterations: PBKDF2_ITER, hash: "SHA-256" },
+    km,
+    { name: "HKDF", hash: "SHA-256" },
+    false,
+    ["deriveKey"]);
+}
+function _buildAAD(stationId, reportId, date, ver){
+  return JSON.stringify({ stationId: String(stationId), reportId: String(reportId),
+    date: String(date), encVersion: ver });
+}
+async function _reportKeyFromMaster(masterHkdf, saltBuf, aadStr){
+  return await crypto.subtle.deriveKey(
+    { name: "HKDF", hash: "SHA-256", salt: saltBuf, info: _strToBuf(aadStr) },
+    masterHkdf,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]);
+}
+async function decryptReport(encObj, masterHkdf, stationId, reportId, date){
+  if (!encObj || !encObj.ciphertext || !encObj.iv) return null;
+  const ver = encObj.encVersion;
+  if (ver !== 1 && ver !== 2) return null;
+  const aadStr = _buildAAD(stationId, reportId, date, ver);
+  if (encObj.aad && encObj.aad !== aadStr) return null;
+  try {
+    if (ver !== 2 || !encObj.salt) return null;
+    const key = await _reportKeyFromMaster(masterHkdf, new Uint8Array(_b64ToBuf(encObj.salt)), aadStr);
+    const iv = new Uint8Array(_b64ToBuf(encObj.iv));
+    const ct = _b64ToBuf(encObj.ciphertext);
+    const pt = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: iv, additionalData: _strToBuf(aadStr), tagLength: 128 },
+      key, ct);
+    return JSON.parse(_bufToStr(pt));
+  } catch (e) { return null; }
+}
+
+/* =========================================================
+   GITHUB API (read-only)
+   ========================================================= */
+const GITHUB_API = "https://api.github.com";
+function _encPath(p){ return String(p).split("/").map(encodeURIComponent).join("/"); }
+
+async function ghRequest(method, endpoint){
+  if(!cloud.token) throw new Error("Not connected");
+  const headers = {
+    "Authorization": "token " + cloud.token,
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+  return await fetch(GITHUB_API + endpoint, { method: method, headers: headers });
+}
+async function ghGetFile(path){
+  const [owner, repo] = cloud.repo.split("/");
+  const r = await ghRequest("GET",
+    "/repos/" + owner + "/" + repo + "/contents/" + _encPath(path) + "?ref=" + cloud.branch);
+  if(r.status === 404) return null;
+  if(!r.ok) throw new Error("Read failed (" + r.status + "): " + path);
+  const data = await r.json();
+  let decoded = null;
+  if(data.content){
+    decoded = _b64ToUtf8(data.content.replace(/\s/g,""));
+  }
+  return { sha: data.sha, decoded: decoded };
+}
+async function ghList(path){
+  const [owner, repo] = cloud.repo.split("/");
+  const r = await ghRequest("GET",
+    "/repos/" + owner + "/" + repo + "/contents/" + _encPath(path) + "?ref=" + cloud.branch);
+  if(r.status === 404) return [];
+  if(!r.ok) throw new Error("List failed (" + r.status + "): " + path);
+  return await r.json();
+}
+
+/* =========================================================
+   CLOUD CONNECT
+   ========================================================= */
+function updateCloudUi(){
+  const btn = document.getElementById("ghConnectBtn");
+  const nameEl = document.getElementById("adminName");
+  const emailEl = document.getElementById("adminEmail");
+  const avEl = document.getElementById("adminAvatar");
+  if(cloud.connected){
+    btn.textContent = "✅ Connected";
+    btn.classList.add("connected");
+    setText(nameEl, cloud.user);
+    setText(emailEl, cloud.repo);
+    setText(avEl, cloud.user.charAt(0).toUpperCase());
+  } else {
+    btn.textContent = "🔗 Connect";
+    btn.classList.remove("connected");
+    setText(nameEl, "Admin");
+    setText(emailEl, "Not connected");
+    setText(avEl, "A");
+  }
+}
+function savePrefs(){
+  try{
+    _storageSet(LS_CLOUD_KEY, JSON.stringify({
+      repo: cloud.repo, branch: cloud.branch
+    }));
+  }catch(e){}
+}
+function loadPrefs(){
+  try{
+    const raw = _storageGet(LS_CLOUD_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    if(d.repo) document.getElementById("ghRepo").value = d.repo;
+  }catch(e){}
+}
+
+async function cloudConnect(){
+  const token = document.getElementById("ghToken").value.trim();
+  const repo = document.getElementById("ghRepo").value.trim();
+
+  if(!token){ showToast("❌ Enter GitHub Token", "error"); return; }
+  if(!token.startsWith("ghp_") && !token.startsWith("github_pat_")){
+    showToast("❌ Invalid token format", "error"); return;
+  }
+  if(!repo || !/^[\w.-]+\/[\w.-]+$/.test(repo)){
+    showToast("❌ Repo must be 'owner/name'", "error"); return;
+  }
+
+  cloud.token = token;
+  cloud.repo = repo;
+  cloud.branch = "main";
+
+  showLoading("Connecting to GitHub...");
+  try{
+    const r = await ghRequest("GET", "/user");
+    if(!r.ok) throw new Error("Invalid token (" + r.status + ")");
+    const user = await r.json();
+
+    const [owner, repoName] = repo.split("/");
+    const r2 = await ghRequest("GET", "/repos/" + owner + "/" + repoName);
+    if(!r2.ok) throw new Error("No access to " + repo);
+
+    cloud.connected = true;
+    cloud.user = user.login;
+    savePrefs();
+    updateCloudUi();
+    hideLoading();
+    showToast("✅ Connected as " + user.login, "success");
+
+    // Auto-refresh
+    await refreshAll();
+  } catch(err){
+    hideLoading();
+    cloud.connected = false;
+    updateCloudUi();
+    showToast("❌ " + err.message, "error");
+  }
+}
+
+function cloudDisconnect(){
+  cloud.connected = false;
+  cloud.token = "";
+  masterKeys = {};
+  allData = [];
+  rawData = [];
+  stationList = [];
+  filteredData = [];
+  document.getElementById("ghToken").value = "";
+  updateCloudUi();
+  renderStats();
+  renderTable();
+  showToast("🔌 Disconnected", "success");
+}
+
+/* =========================================================
+   REFRESH ALL (fetch all stations' reports)
+   ========================================================= */
+async function refreshAll(){
+  if(!cloud.connected){ showToast("❌ Connect first", "error"); return; }
+
+  showLoading("Scanning stations...");
+  try{
+    const stationsDirs = await ghList(CLOUD_REPORTS_DIR);
+    const dirs = (Array.isArray(stationsDirs) ? stationsDirs : []).filter(x => x.type === "dir");
+    stationList = dirs.map(d => d.name).sort();
+
+    rawData = [];
+    let done = 0;
+    for(const d of dirs){
+      const station = d.name;
+      try{
+        const files = await ghList(CLOUD_REPORTS_DIR + "/" + station);
+        for(const f of (Array.isArray(files) ? files : [])){
+          if(!f.name.endsWith(".json")) continue;
+          const iso = f.name.replace(/\.json$/, "");
+          if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) continue;
+          done++;
+          setText(document.getElementById("loadTxt"), "Loading " + done + "...");
+          try{
+            const rf = await ghGetFile(CLOUD_REPORTS_DIR + "/" + station + "/" + f.name);
+            if(rf && rf.decoded){
+              rawData.push({ station: station, iso: iso, file: JSON.parse(rf.decoded) });
+            }
+          } catch(e){ console.warn("Skip " + station + "/" + iso, e); }
+        }
+      } catch(e){ console.warn("Skip station " + station, e); }
+    }
+
+    // If we have cached master keys, auto-decrypt
+    const cached = _storageGet(SS_PASSWORDS_KEY);
+    if(cached){
+      try{
+        const passes = JSON.parse(cached);
+        for(const stn of Object.keys(passes)){
+          try{
+            masterKeys[stn] = await deriveMasterKey(passes[stn], stn);
+          }catch(e){}
+        }
+      }catch(e){}
+    }
+
+    if(Object.keys(masterKeys).length > 0){
+      await decryptAll();
+    } else {
+      allData = [];
+      filteredData = [];
+    }
+
+    document.getElementById("sLastSync").textContent = new Date().toLocaleTimeString();
+    renderStats();
+    renderTable();
+    hideLoading();
+    showToast("✅ Scanned " + stationList.length + " station(s), " + rawData.length + " report(s)", "success");
+  } catch(err){
+    hideLoading();
+    console.error(err);
+    showToast("❌ Refresh failed: " + err.message, "error");
+  }
+}
+
+/* =========================================================
+   DECRYPT ALL
+   ========================================================= */
+async function decryptAll(){
+  if(rawData.length === 0){ allData = []; filteredData = []; return; }
+  showLoading("Decrypting reports...");
+  allData = [];
+  let processed = 0;
+  for(const r of rawData){
+    const key = masterKeys[r.station];
+    if(!key){ processed++; continue; }
+    try{
+      const rid = r.station + "_" + r.iso;
+      const dec = await decryptReport(r.file, key, r.station, rid, r.iso);
+      if(!dec) continue;
+      const stationName = dec.stationName || r.station;
+      const stationCode = dec.stationCode || "";
+      const userName = dec.userName || "—";
+      (dec.tanks || []).forEach(t => {
+        allData.push({
+          station: r.station,
+          stationName: stationName,
+          stationCode: stationCode,
+          userName: userName,
+          date: r.iso,
+          tank: t.name,
+          product: t.product,
+          tls_mm: t.tls_mm,
+          tls_l: t.tls_l,
+          chart_liters: t.chart_liters,
+          diff_tls_chart: t.diff_tls_chart,
+          man_mm: t.man_mm,
+          diff_mm: t.diff_mm,
+          man_chart_liters: t.man_chart_liters,
+          diff_final: t.diff_final
+        });
+      });
+    } catch(e){ console.warn("Decrypt failed for " + r.station + "/" + r.iso, e); }
+    processed++;
+    setText(document.getElementById("loadTxt"), "Decrypting " + processed + " / " + rawData.length + "...");
+  }
+  applyFilters();
+  hideLoading();
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+function renderStats(){
+  const uniqueStations = new Set(allData.map(d => d.station));
+  const uniqueReports = new Set(allData.map(d => d.station + "|" + d.date));
+  const alerts = allData.filter(d => typeof d.diff_mm === "number" && d.diff_mm <= RED_THRESHOLD).length;
+  setText(document.getElementById("sStations"), uniqueStations.size || stationList.length);
+  setText(document.getElementById("sReports"), uniqueReports.size);
+  setText(document.getElementById("sTanks"), allData.length);
+  setText(document.getElementById("sAlerts"), alerts);
+}
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+function applyFilters(){
+  const fStn = (document.getElementById("fStation").value || "").trim().toUpperCase();
+  const fFrom = document.getElementById("fFrom").value;
+  const fTo = document.getElementById("fTo").value;
+  const fDiff = document.getElementById("fDiff").value;
+
+  let list = allData.slice();
+  if(fStn) list = list.filter(d => d.station.toUpperCase().includes(fStn));
+  if(fFrom) list = list.filter(d => d.date >= fFrom);
+  if(fTo) list = list.filter(d => d.date <= fTo);
+  if(fDiff === "alert") list = list.filter(d => typeof d.diff_mm === "number" && d.diff_mm <= RED_THRESHOLD);
+  else if(fDiff === "neg") list = list.filter(d => typeof d.diff_mm === "number" && d.diff_mm < 0);
+  else if(fDiff === "pos") list = list.filter(d => typeof d.diff_mm === "number" && d.diff_mm >= 0);
+
+  filteredData = list;
+  renderTable();
+  const hint = document.getElementById("filterHint");
+  if(list.length !== allData.length){
+    setText(hint, "Showing " + list.length + " of " + allData.length);
+  } else {
+    setText(hint, "");
+  }
+}
+function resetFilters(){
+  document.getElementById("fStation").value = "";
+  document.getElementById("fFrom").value = "";
+  document.getElementById("fTo").value = "";
+  document.getElementById("fDiff").value = "";
+  applyFilters();
+}
+
+/* =========================================================
+   RENDER TABLE
+   ========================================================= */
+function renderTable(){
+  const tbody = document.getElementById("tbody");
+  const tableWrap = document.getElementById("tableWrap");
+  const emptyState = document.getElementById("emptyState");
+  tbody.innerHTML = "";
+
+  if(filteredData.length === 0){
+    if(allData.length === 0){
+      emptyState.style.display = "block";
+      tableWrap.style.display = "none";
+    } else {
+      emptyState.style.display = "none";
+      tableWrap.style.display = "block";
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 15;
+      td.style.padding = "40px";
+      td.style.textAlign = "center";
+      td.style.color = "#64748B";
+      td.style.fontStyle = "italic";
+      td.textContent = "No rows match the filter";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    }
+    return;
+  }
+
+  emptyState.style.display = "none";
+  tableWrap.style.display = "block";
+
+  filteredData.slice(0, 3000).forEach(r => {
+    const tr = document.createElement("tr");
+    const cells = [
+      { v: r.station,   cls: "station" },
+      { v: r.date,      cls: "" },
+      { v: r.tank,      cls: "" },
+      { v: r.product,   cls: "" },
+      { v: fmtNum(r.tls_mm), cls: "" },
+      { v: fmtNum(r.tls_l),  cls: "" },
+      { v: fmtNum(r.chart_liters), cls: "" },
+      { v: fmtNum(r.diff_tls_chart), cls: r.diff_tls_chart < 0 ? "neg" : "pos" },
+      { v: fmtNum(r.man_mm), cls: "" },
+      { v: fmtNum(r.diff_mm), cls: (typeof r.diff_mm === "number" && r.diff_mm <= RED_THRESHOLD) ? "red" : (r.diff_mm < 0 ? "neg" : "pos") },
+      { v: fmtNum(r.man_chart_liters), cls: "" },
+      { v: fmtNum(r.diff_final), cls: r.diff_final < 0 ? "neg" : "pos" },
+      { v: fmtNum(Math.abs(r.diff_mm || 0)), cls: "" },
+      { v: fmtNum(Math.abs(r.diff_final || 0)), cls: "" },
+      { v: (r.tls_l > 0 ? fmtNum(Math.abs(r.diff_final || 0) / r.tls_l * 100) : "0.000") + "%", cls: "" }
+    ];
+    cells.forEach(c => {
+      const td = document.createElement("td");
+      if(c.cls) td.className = c.cls;
+      td.textContent = c.v == null ? "" : String(c.v);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  if(filteredData.length > 3000){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 15;
+    td.style.padding = "14px";
+    td.style.textAlign = "center";
+    td.style.color = "#64748B";
+    td.style.fontStyle = "italic";
+    td.textContent = "Showing first 3000 of " + filteredData.length + " rows";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+}
+
+/* =========================================================
+   PASSWORDS MODAL
+   ========================================================= */
+function openPasswordsModal(){
+  if(!cloud.connected){ showToast("❌ Connect first", "error"); return; }
+  if(stationList.length === 0){
+    showToast("⚠️ No stations found. Click Refresh first.", "warn");
+    return;
+  }
+  const cached = _storageGet(SS_PASSWORDS_KEY);
+  let cachedMap = {};
+  if(cached){ try{ cachedMap = JSON.parse(cached); }catch(e){} }
+
+  const list = document.getElementById("passwordList");
+  list.innerHTML = "";
+  stationList.forEach(stn => {
+    const div = document.createElement("div");
+    div.className = "item";
+    const label = document.createElement("span");
+    label.className = "stn";
+    label.textContent = stn;
+    const count = rawData.filter(r => r.station === stn).length;
+    const countSpan = document.createElement("span");
+    countSpan.className = "count";
+    countSpan.textContent = "(" + count + " report" + (count === 1 ? "" : "s") + ")";
+    const inp = document.createElement("input");
+    inp.type = "password";
+    inp.placeholder = "Password for " + stn;
+    inp.value = cachedMap[stn] || "";
+    inp.dataset.station = stn;
+    div.appendChild(label);
+    div.appendChild(countSpan);
+    div.appendChild(inp);
+    list.appendChild(div);
+  });
+  document.getElementById("passModal").classList.add("show");
+}
+function closePasswordsModal(){
+  document.getElementById("passModal").classList.remove("show");
+}
+async function applyPasswords(){
+  const inputs = document.querySelectorAll("#passwordList input");
+  const passwords = {};
+  inputs.forEach(inp => {
+    const v = inp.value.trim();
+    if(v) passwords[inp.dataset.station] = v;
+  });
+  if(Object.keys(passwords).length === 0){
+    showToast("⚠️ No passwords entered", "warn");
+    return;
+  }
+  showLoading("Deriving keys...");
+  masterKeys = {};
+  let ok = 0;
+  for(const stn of Object.keys(passwords)){
+    try{
+      masterKeys[stn] = await deriveMasterKey(passwords[stn], stn);
+      ok++;
+    } catch(e){ console.warn("Key derive failed for " + stn, e); }
+  }
+  _storageSet(SS_PASSWORDS_KEY, JSON.stringify(passwords));
+  closePasswordsModal();
+  await decryptAll();
+  renderStats();
+  showToast("✅ Derived " + ok + " key(s)", "success");
+}
+
+/* =========================================================
+   CLEAR ALL
+   ========================================================= */
+function clearAll(){
+  if(!confirm("Clear all decrypted data and cached passwords from this tab?\n\nThe cloud data is NOT touched.")) return;
+  masterKeys = {};
+  allData = [];
+  filteredData = [];
+  rawData = [];
+  _storageRemove(SS_PASSWORDS_KEY);
+  renderStats();
+  renderTable();
+  showToast("🗑️ Cleared", "success");
+}
+
+/* =========================================================
+   EXPORT EXCEL
+   ========================================================= */
+function exportExcel(){
+  if(filteredData.length === 0){ showToast("⚠️ No data to export", "warn"); return; }
+  try{
+    /* Lazy-load xlsx if not yet loaded */
+    if(typeof XLSX === "undefined"){
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
+      s.onload = () => { try { _doExportExcel(); } catch(e){ showToast("❌ " + e.message, "error"); } };
+      s.onerror = () => showToast("❌ Failed to load Excel library", "error");
+      document.head.appendChild(s);
+      return;
+    }
+    _doExportExcel();
+  } catch(err){
+    showToast("❌ " + err.message, "error");
+  }
+}
+function _doExportExcel(){
+  const wb = XLSX.utils.book_new();
+  const aoa = [["Station","Date","Tank","Product","TLS MM","TLS L","Chart L","Diff TLS-Chart","Manual MM","Diff MM","Manual Chart L","Diff Ltrs","Corr MM","Corr L","Corr %"]];
+  filteredData.forEach(r => {
+    aoa.push([
+      r.station, r.date, r.tank, r.product,
+      r.tls_mm, r.tls_l, r.chart_liters, r.diff_tls_chart,
+      r.man_mm, r.diff_mm, r.man_chart_liters, r.diff_final,
+      Math.abs(r.diff_mm || 0), Math.abs(r.diff_final || 0),
+      (r.tls_l > 0 ? (Math.abs(r.diff_final || 0) / r.tls_l * 100) : 0)
+    ]);
+  });
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws["!cols"] = [
+    {wch:10},{wch:12},{wch:10},{wch:14},{wch:11},{wch:11},{wch:11},{wch:13},
+    {wch:12},{wch:11},{wch:14},{wch:12},{wch:11},{wch:11},{wch:10}
+  ];
+  XLSX.utils.book_append_sheet(wb, ws, "All Stations");
+  const timestamp = new Date().toISOString().slice(0,19).replace(/[-:T]/g,"").slice(0,15);
+  XLSX.writeFile(wb, "Admin_Reports_" + timestamp + ".xlsx");
+  showToast("📊 Excel exported", "success");
+}
+
+/* =========================================================
+   EXPORT PDF
+   ========================================================= */
+function exportPDF(){
+  if(filteredData.length === 0){ showToast("⚠️ No data to export", "warn"); return; }
+  const headers = ["Station","Date","Tank","Product","TLS MM","TLS L","Chart L","Diff TLS-Chart","Manual MM","Diff MM","Manual Chart L","Diff Ltrs","Corr MM","Corr L","Corr %"];
+  let html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Admin Report</title>" +
+    "<style>@page{size:A4 landscape;margin:10mm;}" +
+    "body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#1F2937;margin:0;}" +
+    "h1{font-size:14pt;text-align:center;color:#0F4C81;margin:0 0 4px;letter-spacing:1px;}" +
+    ".sub{text-align:center;color:#475569;font-size:9.5pt;margin:0 0 10px;}" +
+    "table{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+    "th{background:#0F4C81;color:#fff;padding:5px 3px;font-size:7pt;border:1px solid #94A3B8;text-align:center;word-wrap:break-word;}" +
+    "td{border:1px solid #CBD5E1;padding:3px;font-size:7pt;text-align:center;word-wrap:break-word;}" +
+    "td.red{background:#DC2626 !important;color:#fff;font-weight:bold;}" +
+    "td.neg{color:#DC2626;}td.pos{color:#047857;}" +
+    "tr:nth-child(even) td{background:#F8FAFC;}" +
+    ".footer{margin-top:10px;text-align:center;color:#64748B;font-size:8pt;}" +
+    ".sig{text-align:center;color:#0F4C81;font-size:10pt;font-weight:800;letter-spacing:2px;margin-top:4px;}" +
+    "</style></head><body>" +
+    "<h1>👑 Admin Dashboard — All Stations</h1>" +
+    "<p class='sub'>Generated " + escapeHtml(new Date().toLocaleString()) + " · " + filteredData.length + " rows</p>" +
+    "<table><thead><tr>";
+  headers.forEach(h => { html += "<th>" + escapeHtml(h) + "</th>"; });
+  html += "</tr></thead><tbody>";
+  filteredData.slice(0, 5000).forEach(r => {
+    const vals = [
+      r.station, r.date, r.tank, r.product,
+      fmtNum(r.tls_mm), fmtNum(r.tls_l), fmtNum(r.chart_liters), fmtNum(r.diff_tls_chart),
+      fmtNum(r.man_mm), fmtNum(r.diff_mm), fmtNum(r.man_chart_liters), fmtNum(r.diff_final),
+      fmtNum(Math.abs(r.diff_mm||0)), fmtNum(Math.abs(r.diff_final||0)),
+      (r.tls_l > 0 ? fmtNum(Math.abs(r.diff_final||0) / r.tls_l * 100) : "0.000") + "%"
+    ];
+    html += "<tr>";
+    vals.forEach((v, i) => {
+      let cls = "";
+      if(i === 9){
+        const n = parseFloat(v);
+        if(!isNaN(n) && n <= RED_THRESHOLD) cls = "red";
+        else if(!isNaN(n) && n < 0) cls = "neg";
+        else cls = "pos";
+      }
+      html += "<td class='" + cls + "'>" + escapeHtml(String(v)) + "</td>";
+    });
+    html += "</tr>";
+  });
+  html += "</tbody></table><p class='footer'>End of report</p><p class='sig'>" + escapeHtml(AUTHOR) + "</p></body></html>";
+
+  let w = null;
+  try { w = window.open("", "_blank", "width=1400,height=900,noopener,noreferrer"); } catch(e){ w = null; }
+  if(w && !w.closed){
+    try{
+      w.document.open(); w.document.write(html); w.document.close();
+      setTimeout(() => { try { w.focus(); w.print(); } catch(e){} }, 500);
+      showToast("📄 PDF ready — click Print", "success");
+    } catch(err){
+      _fallbackPdf(html);
+    }
+  } else { _fallbackPdf(html); }
+}
+function _fallbackPdf(html){
+  showToast("⚠️ Popup blocked — using iframe", "warn");
+  const iframe = document.createElement("iframe");
+  iframe.setAttribute("sandbox", "allow-modals allow-popups allow-same-origin");
+  iframe.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;";
+  document.body.appendChild(iframe);
+  const doc = iframe.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+  setTimeout(() => {
+    try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+    catch(e){ alert("❌ Please allow pop-ups"); }
+    setTimeout(() => { document.body.removeChild(iframe); }, 1000);
+  }, 400);
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+function init(){
+  /* Connect button */
+  document.getElementById("ghConnectBtn").addEventListener("click", async () => {
+    if(cloud.connected) cloudDisconnect();
+    else await cloudConnect();
+  });
+
+  /* Header actions */
+  document.getElementById("refreshBtn").addEventListener("click", refreshAll);
+  document.getElementById("setPasswordsBtn").addEventListener("click", openPasswordsModal);
+  document.getElementById("exportExcelBtn").addEventListener("click", exportExcel);
+  document.getElementById("exportPdfBtn").addEventListener("click", exportPDF);
+  document.getElementById("clearBtn").addEventListener("click", clearAll);
+
+  /* Toolbar */
+  document.getElementById("applyFiltersBtn").addEventListener("click", applyFilters);
+  document.getElementById("resetFiltersBtn").addEventListener("click", resetFilters);
+  document.getElementById("fStation").addEventListener("input", () => { /* manual apply only */ });
+  document.getElementById("fDiff").addEventListener("change", applyFilters);
+
+  /* Passwords modal */
+  document.getElementById("passCancel").addEventListener("click", closePasswordsModal);
+  document.getElementById("passSave").addEventListener("click", applyPasswords);
+  document.getElementById("passModal").addEventListener("click", (e) => {
+    if(e.target.id === "passModal") closePasswordsModal();
+  });
+
+  /* Keyboard */
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") closePasswordsModal();
+    if(e.key === "F5" && e.shiftKey){ /* allow */ }
+  });
+
+  loadPrefs();
+  updateCloudUi();
+  renderStats();
+  renderTable();
+}
+
+init();
+</script>
+</body>
+</html>
